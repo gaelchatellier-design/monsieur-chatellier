@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Monsieur Châtellier — Maquette Skate mag</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;600;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0b0d;--panel:#16161a;--fg:#f4f1ea;--lime:#c6ff00;--pink:#ff2d87;--cyan:#00e5ff;--mute:#8b8b93}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--fg);font:17px/1.55 Archivo,sans-serif;overflow-x:hidden}
+a{color:inherit}
+h1,h2,h3{font-family:Anton,sans-serif;font-weight:400;text-transform:uppercase;line-height:.92;letter-spacing:.01em}
+.mono{font-family:'Space Mono',monospace}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+
+/* ticker */
+.ticker{background:var(--lime);color:#000;overflow:hidden;white-space:nowrap;font-family:Anton;text-transform:uppercase;font-size:18px;padding:6px 0}
+.ticker div{display:inline-block;animation:tick 28s linear infinite}
+@keyframes tick{to{transform:translateX(-50%)}}
+
+header{position:sticky;top:0;z-index:10;background:rgba(11,11,13,.92);backdrop-filter:blur(6px);border-bottom:2px solid var(--fg)}
+header .wrap{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;gap:14px;flex-wrap:wrap}
+.brand{font-family:Anton;font-size:28px;text-transform:uppercase;text-decoration:none}
+.brand b{color:var(--lime);font-weight:400}
+nav a{font-family:'Space Mono';font-size:13px;text-transform:uppercase;text-decoration:none;margin-left:18px}
+nav a:hover{color:var(--pink)}
+
+/* hero */
+.hero{position:relative;padding:60px 0 80px;min-height:78vh;display:grid;align-items:center}
+.hero .grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(280px,1fr);gap:30px;align-items:center}
+.hero h1{font-size:clamp(64px,11vw,170px);overflow-wrap:anywhere}
+.hero h1 .l{display:block}
+.hero h1 .o{color:transparent;-webkit-text-stroke:2px var(--fg)}
+.hero h1 .y{color:var(--lime)}
+.sub{margin:22px 0;max-width:32em;font-size:19px}
+.tag{display:inline-block;background:var(--pink);color:#000;font-family:'Space Mono';font-weight:700;font-size:13px;padding:4px 10px;text-transform:uppercase;transform:rotate(-2deg)}
+.photo{position:relative;aspect-ratio:4/5;background:linear-gradient(135deg,#222,#111);border:3px solid var(--fg);display:grid;place-items:center;transform:rotate(3deg);box-shadow:-12px 12px 0 var(--cyan)}
+.photo span{font-family:'Space Mono';font-size:13px;color:var(--mute);text-align:center;padding:12px}
+.sticker{position:absolute;font-family:Anton;text-transform:uppercase;border-radius:50%;display:grid;place-items:center;text-align:center;line-height:1}
+.s1{width:110px;height:110px;background:var(--lime);color:#000;right:-24px;top:-30px;transform:rotate(14deg);font-size:22px}
+.s2{width:90px;height:90px;background:var(--pink);color:#000;left:-30px;bottom:30px;transform:rotate(-12deg);font-size:18px}
+
+.signup{display:flex;gap:0;max-width:520px;border:3px solid var(--fg)}
+.signup input{flex:1;min-width:0;background:transparent;border:0;color:var(--fg);font:inherit;padding:14px}
+.signup input::placeholder{color:var(--mute)}
+.signup input:focus{outline:2px solid var(--lime)}
+.btn{font-family:Anton;text-transform:uppercase;font-size:20px;background:var(--lime);color:#000;border:0;padding:0 24px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;min-height:50px;transition:background .15s}
+.btn:hover{background:var(--pink)}
+.btn.o{background:transparent;color:var(--fg);border:3px solid var(--fg)}
+.btn.o:hover{background:var(--fg);color:#000}
+.note{font-family:'Space Mono';font-size:12px;color:var(--mute);margin-top:10px}
+
+/* sections */
+section{padding:70px 0;border-top:2px solid var(--fg);position:relative}
+.sec-num{font-family:'Space Mono';color:var(--lime);font-size:14px}
+.sec-title{font-size:clamp(56px,10vw,140px);margin:6px 0 30px}
+.sec-title.pink{color:var(--pink)}.sec-title.cyan{color:var(--cyan)}
+
+.chroniques{display:grid;grid-template-columns:repeat(12,1fr);gap:20px}
+.card{background:var(--panel);border:2px solid var(--fg);display:flex;flex-direction:column;transition:transform .15s,border-color .15s}
+.card:hover{transform:translate(-4px,-4px);border-color:var(--lime)}
+.card:nth-child(1){grid-column:span 7}
+.card:nth-child(2){grid-column:span 5}
+.card:nth-child(3){grid-column:span 12;flex-direction:row}
+.card .img{background:repeating-linear-gradient(45deg,#1d1d22 0 14px,#232329 14px 28px);display:grid;place-items:center;min-height:240px;font-family:'Space Mono';font-size:12px;color:var(--mute);text-align:center;padding:14px}
+.card:nth-child(3) .img{width:34%}
+.card .body{padding:22px;display:flex;flex-direction:column;gap:10px;flex:1}
+.card h3{font-size:38px}
+.card p{color:#cfcdc6;font-size:15px}
+.more{margin-top:auto;font-family:'Space Mono';font-weight:700;color:var(--lime);text-decoration:none;font-size:14px;text-transform:uppercase}
+.more:hover{color:var(--pink)}
+
+.vids{display:grid;grid-template-columns:2fr 1fr 1fr;gap:20px}
+.v{background:#000;border:2px solid var(--fg);position:relative;aspect-ratio:16/9;display:grid;place-items:center;color:var(--mute);font-family:'Space Mono';font-size:12px;overflow:hidden}
+.v.tall{aspect-ratio:9/16}
+.v::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.04) 0 1px,transparent 1px 3px)}
+.v .p{position:relative;z-index:1;width:64px;height:64px;background:var(--pink);color:#000;display:grid;place-items:center;font-size:24px;clip-path:polygon(0 0,100% 50%,0 100%);padding-left:14px}
+.v i{position:absolute;bottom:10px;left:12px;z-index:1;font-style:normal}
+.v.main{grid-row:span 1}
+.vids .row2{grid-column:1/-1;display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
+
+.book{display:grid;grid-template-columns:320px 1fr;gap:50px;align-items:center}
+.cover{aspect-ratio:3/4;background:var(--lime);color:#000;padding:22px;display:flex;flex-direction:column;justify-content:space-between;transform:rotate(-4deg);box-shadow:14px 14px 0 var(--pink)}
+.cover h3{font-size:clamp(56px,7vw,84px)}
+.cover span{font-family:'Space Mono';font-size:12px;font-weight:700;text-transform:uppercase}
+.book p{max-width:34em;margin:16px 0 24px;font-size:19px}
+
+footer{background:var(--lime);color:#000;padding:50px 0 30px;margin-top:0}
+footer .big{font-family:Anton;text-transform:uppercase;font-size:clamp(46px,9vw,120px);line-height:.95}
+footer .wrap > div.links{display:flex;gap:22px;flex-wrap:wrap;font-family:'Space Mono';font-weight:700;margin-top:24px;text-transform:uppercase;font-size:14px}
+footer a{text-decoration:underline}
+.pro{margin-top:30px;font-family:'Space Mono';font-size:13px;border-top:2px solid #000;padding-top:14px}
+
+@media(max-width:860px){
+  .hero .grid,.book{grid-template-columns:1fr}
+  .photo{max-width:340px;margin:20px auto}
+  .chroniques{display:flex;flex-direction:column}
+  .card:nth-child(3){flex-direction:column}.card:nth-child(3) .img{width:100%}
+  .vids{grid-template-columns:1fr 1fr}.vids .main{grid-column:1/-1}
+  .cover{max-width:260px}
+  nav{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="ticker"><div>
+  Plus jeune boomer de France ★ Ubercool skater ★ Autobiographe ★ Humain ★ Né sous Pompidou ★ Élevé sous Giscard ★ Propulsé par Mitterrand ★ Mentoré par le grand Jacques ★
+  Plus jeune boomer de France ★ Ubercool skater ★ Autobiographe ★ Humain ★ Né sous Pompidou ★ Élevé sous Giscard ★ Propulsé par Mitterrand ★ Mentoré par le grand Jacques ★
+</div></div>
+
+<header>
+  <div class="wrap">
+    <a class="brand" href="#">Monsieur <b>Châtellier</b></a>
+    <nav><a href="#lire">Lire</a><a href="#regarder">Regarder</a><a href="#livre">Le livre</a><a href="#contact">Contact</a></nav>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap grid">
+    <div>
+      <span class="tag">Issue n°1 — Rentrée</span>
+      <h1><span class="l">Monsieur</span><span class="l o">Châtel</span><span class="l y">lier.</span></h1>
+      <p class="sub">Un personnage né sous Pompidou, toujours sur sa planche. Chroniques OK Boomer, vlogs, et bientôt un livre.</p>
+      <form class="signup" onsubmit="return false">
+        <input type="email" placeholder="ton@email.fr" aria-label="Email" required>
+        <button class="btn" type="submit">Abonne-toi</button>
+      </form>
+      <p class="note">Newsletter gratuite · quelques centaines de lecteurs · avec toi, un de plus ?</p>
+    </div>
+    <div class="photo">
+      <span>[ PORTRAIT<br>assets/portrait.jpg ]</span>
+      <div class="sticker s1">OK<br>Boomer</div>
+      <div class="sticker s2">Skate<br>or die*</div>
+    </div>
+  </div>
+</div>
+
+<section id="lire">
+  <div class="wrap">
+    <div class="sec-num">01 / LIRE</div>
+    <h2 class="sec-title">Chroniques<br>OK Boomer</h2>
+    <div class="chroniques">
+      <article class="card">
+        <div class="img">[ Dessin Rapaport — « Mon chien, ce HPI » ]</div>
+        <div class="body">
+          <h3>Mon chien, ce HPI</h3>
+          <p>Que ceux qui ont résisté me jettent la première balle. J'en connais même qui, dans ma situation, ont fait signer des contrats à leurs enfants. Alors hein, bon.</p>
+          <a class="more" href="#">La suite dans la newsletter →</a>
+        </div>
+      </article>
+      <article class="card">
+        <div class="img">[ Dessin Rapaport — « Les marches de la gloriole » ]</div>
+        <div class="body">
+          <h3>Les marches de la gloriole</h3>
+          <p>À quoi ça tient de devenir une star internationale ? De remplir des stades ? Répondez. Ce n'est pas une question théorique.</p>
+          <a class="more" href="#">La suite dans la newsletter →</a>
+        </div>
+      </article>
+      <article class="card">
+        <div class="img">[ Dessin Rapaport ]</div>
+        <div class="body">
+          <h3>Culottes courtes, osselets &amp; cacolacs</h3>
+          <p>Les copains s'appelaient Didier, Vincent, Hélène ou Valérie. On essaie de comprendre ce qui nous est arrivé, depuis.</p>
+          <a class="more" href="#">La suite dans la newsletter →</a>
+        </div>
+      </article>
+    </div>
+    <p style="margin-top:30px"><a class="btn" href="#">Lire la newsletter</a></p>
+  </div>
+</section>
+
+<section id="regarder">
+  <div class="wrap">
+    <div class="sec-num">02 / REGARDER</div>
+    <h2 class="sec-title cyan">Ça roule.</h2>
+    <div class="vids">
+      <div class="v main"><div class="p"></div><i>[ Dernier vlog YouTube ]</i></div>
+      <div class="v tall"><div class="p"></div><i>[ Reel ]</i></div>
+      <div class="v tall"><div class="p"></div><i>[ Reel ]</i></div>
+      <div class="row2"><a class="btn o" href="#">YouTube</a><a class="btn o" href="#">Instagram</a></div>
+    </div>
+  </div>
+</section>
+
+<section id="livre">
+  <div class="wrap book">
+    <div class="cover"><span>Monsieur Châtellier</span><h3>OK<br>Boomer</h3><span>Le recueil · dessins de G. Rapaport</span></div>
+    <div>
+      <div class="sec-num">03 / LE LIVRE</div>
+      <h2 class="sec-title pink" style="margin-bottom:0">Bientôt<br>en papier.</h2>
+      <p>Toutes les chroniques réunies, avec les dessins de Gilles Rapaport. Laisse ton e-mail, tu seras prévenu en premier.</p>
+      <a class="btn" href="#">Me prévenir</a>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="big">Dis-moi ce<br>que t'en penses.</div>
+    <div class="links">
+      <a href="mailto:gael@chatellier.fr">gael@chatellier.fr</a><a href="#">YouTube</a><a href="#">Instagram</a><a href="#">Newsletter</a>
+    </div>
+    <p class="pro">Et aussi, dans la vraie vie, directeur de projets digitaux → <a href="#">mon profil LinkedIn</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
