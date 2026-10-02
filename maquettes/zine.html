@@ -32,7 +32,8 @@ nav a:hover{border-color:var(--flash)}
   repeating-linear-gradient(45deg,#cfc9bb 0 10px,#d9d4c7 10px 20px);border:3px solid var(--ink);
   display:grid;place-items:center;transform:rotate(-2deg);box-shadow:8px 8px 0 var(--ink)}
 .photo b{font-family:'Special Elite';font-size:14px;background:var(--paper);padding:6px 10px;border:2px solid var(--ink)}
-.tape{position:absolute;top:-16px;left:50%;width:120px;height:34px;background:rgba(255,228,0,.85);transform:translateX(-50%) rotate(3deg);border:1px dashed rgba(0,0,0,.25)}
+.photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 20%;filter:grayscale(1) contrast(1.15)}
+.tape{z-index:1;position:absolute;top:-16px;left:50%;width:120px;height:34px;background:rgba(255,228,0,.85);transform:translateX(-50%) rotate(3deg);border:1px dashed rgba(0,0,0,.25)}
 .kicker{display:inline-block;background:var(--ink);color:var(--paper);font-family:'Special Elite';padding:4px 10px;font-size:14px;transform:rotate(-1.5deg)}
 .hero h1{font-size:clamp(52px,8vw,96px);margin:16px 0}
 .hero h1 em{font-style:normal;background:var(--sun);padding:0 .12em;box-shadow:5px 5px 0 var(--flash)}
@@ -122,7 +123,7 @@ footer .brand{font-size:28px}
 <main class="wrap">
 
   <div class="hero">
-    <div class="photo"><i class="tape"></i><b>[ PORTRAIT N&amp;B — assets/portrait.jpg ]</b></div>
+    <div class="photo"><i class="tape"></i><img src="../assets/portrait.jpg" alt="Portrait de Monsieur Châtellier"></div>
     <div>
       <span class="kicker">Né sous Pompidou · Toujours sur sa planche</span>
       <h1>Plus jeune <em>boomer</em> de France.</h1>
