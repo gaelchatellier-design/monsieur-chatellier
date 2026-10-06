@@ -7,6 +7,6 @@ Refonte de chatellier.fr : la maison de Monsieur Châtellier (chroniques OK Boom
 - `assets/` : images sources (portrait, dessins de Gilles Rapaport, images de vidéos)
 
 ## À compléter avant mise en ligne
-- Dates de publication des 3 chroniques (données structurées)
-- Vidéos : brancher les vraies vidéos YouTube et Instagram
+- Chroniques sans date de publication (choix assumé)
+- Vidéos : lecteurs YouTube et Instagram intégrés (à tester en ligne ; titres des reels éventuels)
 - Livre : page dédiée quand le titre et la date de sortie sont connus
