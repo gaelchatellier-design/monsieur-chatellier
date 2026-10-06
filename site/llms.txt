@@ -1,6 +1,6 @@
 # Monsieur Châtellier
 
-> Site de Monsieur Châtellier (Gaël Chatellier), auteur des chroniques OK Boomer : une autobiographie épistolaire humoristique envoyée par e-mail depuis 2019, illustrée par Gilles Rapaport. Il publie aussi des vlogs et prépare un livre recueil.
+> Site de Monsieur Châtellier (Gaël Châtellier), auteur des chroniques OK Boomer : une autobiographie épistolaire humoristique envoyée par e-mail depuis 2019, illustrée par Gilles Rapaport. Il publie aussi des vlogs et prépare un livre recueil.
 
 ## Pages
 - [Accueil](https://www.chatellier.fr/): présentation, chroniques, vidéos, livre à venir
