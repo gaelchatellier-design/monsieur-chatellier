@@ -147,3 +147,7 @@ blockquote p{margin:0 0 12px}
   .article-wrap .chroniques,.about-grid{grid-template-columns:1fr}
   .about-grid .photo{max-width:260px}
 }
+.illus img{display:block;width:100%;height:auto;border:3px solid var(--ink);box-shadow:6px 6px 0 var(--ink);background:#fff}
+.card .img{display:block;aspect-ratio:1;overflow:hidden;padding:0;background:#fff}
+.card .img img{display:block;width:100%;height:100%;object-fit:cover}
+.gap{text-align:center;letter-spacing:.3em;color:var(--grey)}
