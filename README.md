@@ -26,7 +26,8 @@ Le dossier `site/` est produit par `generator/` (HTML, CSS et images sources) :
 Pour une version ouvrable en double-clic (liens en `index.html`) : `python3 generator/build.py apercu local`.
 
 ## Déploiement sur OVH
-Chaque fusion sur `main` envoie `site/` par FTPS sur OVH (`.github/workflows/deploy.yml`).
-Réglages GitHub (Settings → Secrets and variables → Actions) :
-- Secrets : `FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD` (identifiants FTP de l'hébergement OVH)
-- Variable : `FTP_DIR` (dossier cible sur OVH, ex. `www-nouveau/` pour tester, puis `www/`)
+Chaque fusion sur `main` publie le contenu de `site/` dans la branche `deploy` (`.github/workflows/deploy.yml`).
+L'intégration Git de l'hébergement OVH (Multisite → site → Git) récupère cette branche :
+- Dépôt : `git@github.com:gaelchatellier-design/monsieur-chatellier.git` (SSH, dépôt privé), branche `deploy`
+- Clé publique fournie par OVH : à ajouter dans GitHub (Settings → Deploy keys, lecture seule)
+- Mise à jour automatique : l'URL de webhook d'OVH est à ajouter dans GitHub (Settings → Webhooks, événement push)

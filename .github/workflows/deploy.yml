@@ -1,25 +1,30 @@
-name: Déploiement sur OVH
+name: Publication du site (branche deploy)
 
-# Se lance à chaque fusion sur main, ou à la main depuis l'onglet Actions.
+# À chaque fusion sur main, le contenu de site/ est publié tel quel dans la branche "deploy".
+# OVH (intégration Git de l'hébergement) récupère cette branche et met le site en ligne.
 on:
   push:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
-  deploy:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      # Envoie le contenu de site/ par FTPS. Ne supprime rien d'autre sur le serveur.
-      - name: Envoi FTP vers OVH
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftps
-          local-dir: site/
-          # Dossier cible sur OVH (variable GitHub FTP_DIR, par défaut un dossier de test)
-          server-dir: ${{ vars.FTP_DIR || 'www-nouveau/' }}
+      - name: Publier site/ dans la branche deploy
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -e
+          cd site
+          git init -q -b deploy
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Site publié depuis ${GITHUB_SHA::7}"
+          git push -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" deploy
