@@ -1,7 +1,8 @@
 name: Publication du site (branche deploy)
 
-# À chaque fusion sur main, le contenu de site/ est publié tel quel dans la branche "deploy".
+# À chaque fusion sur main, le contenu de site/ est publié dans la branche "deploy".
 # OVH (intégration Git de l'hébergement) récupère cette branche et met le site en ligne.
+# L'historique de "deploy" est linéaire (un commit ajouté à chaque publication) : OVH fait un "git pull".
 on:
   push:
     branches: [main]
@@ -18,13 +19,8 @@ jobs:
 
       - name: Publier site/ dans la branche deploy
         env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -e
-          cd site
-          git init -q -b deploy
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-          git commit -q -m "Site publié depuis ${GITHUB_SHA::7}"
-          git push -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" deploy
+          REPO_URL: https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git
+          SITE_DIR: ${{ github.workspace }}/site
+          # Dernier commit de "deploy" connu d'OVH avant la correction de l'historique (à retirer plus tard).
+          REPAIR_BASE: 9480e9b82245a605cb1a39e0eb7b010c271e26b0
+        run: bash .github/scripts/publish-deploy.sh
