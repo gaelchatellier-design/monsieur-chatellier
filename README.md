@@ -17,3 +17,10 @@ Refonte de chatellier.fr : la maison de Monsieur Châtellier (chroniques OK Boom
 - Les lecteurs YouTube et Instagram ne se chargent qu'après accord (ou au clic sur « Charger »)
 - Polices auto-hébergées (aucune requête vers Google Fonts)
 - Page `site/confidentialite/`
+
+## Régénérer le site
+Le dossier `site/` est produit par `generator/` (HTML, CSS et images sources) :
+
+    python3 generator/build.py site prod
+
+Pour une version ouvrable en double-clic (liens en `index.html`) : `python3 generator/build.py apercu local`.
