@@ -132,7 +132,7 @@ un-conte-des-mille-et-une-ipas /chroniques/
 vous-avez-bien-recu-ma-carte-de-voeux /chroniques/
 les-vrais-durs-ne-dansent-pas-vraiment /chroniques/
 le-marketing-de-la-nostalgie-camarade /chroniques/
-mon-chien-ce-hpi /chroniques/
+mon-chien-ce-hpi /chroniques/mon-chien-ce-hpi/
 
 # anciennes adresses techniques
 feed https://monsieurchatellier.substack.com/feed
