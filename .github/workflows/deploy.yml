@@ -1,0 +1,25 @@
+name: Déploiement sur OVH
+
+# Se lance à chaque fusion sur main, ou à la main depuis l'onglet Actions.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Envoie le contenu de site/ par FTPS. Ne supprime rien d'autre sur le serveur.
+      - name: Envoi FTP vers OVH
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          local-dir: site/
+          # Dossier cible sur OVH (variable GitHub FTP_DIR, par défaut un dossier de test)
+          server-dir: ${{ vars.FTP_DIR || 'www-nouveau/' }}
