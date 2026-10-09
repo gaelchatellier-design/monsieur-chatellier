@@ -31,3 +31,7 @@ L'intégration Git de l'hébergement OVH (Multisite → site → Git) récupère
 - Dépôt : `git@github.com:gaelchatellier-design/monsieur-chatellier.git` (SSH, dépôt privé), branche `deploy`
 - Clé publique fournie par OVH : à ajouter dans GitHub (Settings → Deploy keys, lecture seule)
 - Mise à jour automatique : l'URL de webhook d'OVH est à ajouter dans GitHub (Settings → Webhooks, événement push)
+
+## Redirections des anciennes adresses WordPress
+La liste est dans `generator/redirects.txt` (une ligne par ancienne adresse : `ancienne-adresse nouvelle-adresse`), reprise dans `site/.htaccess`.
+Les 127 anciens articles redirigent vers `/chroniques/`, les anciennes pages vers leur équivalent. L'ancien WordPress reste intact dans le dossier `www` d'OVH (ne pas le supprimer avant plusieurs mois).

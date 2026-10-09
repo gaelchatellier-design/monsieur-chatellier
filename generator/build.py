@@ -343,6 +343,12 @@ nf_body = """<div class="wrap article-wrap">
 nf = page(0, "404.html", "Page introuvable — Monsieur Châtellier", "Page introuvable sur le site de Monsieur Châtellier.", nf_body, [], robots_index=False)
 nf = re.sub(r'(href|src)="(?!https?:|mailto:|#|/)(?:\./)?', r'\1="/', nf).replace('data-home=""', 'data-home="/"')
 write("404.html", nf)
+REDIRECTS = ""
+for _l in open(os.path.join(GEN, "redirects.txt"), encoding="utf-8").read().splitlines():
+    _l = _l.strip()
+    if not _l or _l.startswith("#"): continue
+    _src, _dst = _l.split(None, 1)
+    REDIRECTS += "RewriteRule ^%s/?$ %s [R=301,L,NE]\n" % (_src, _dst)
 write(".htaccess", """# Pas de liste de dossiers
 Options -Indexes
 ErrorDocument 404 /404.html
@@ -357,8 +363,8 @@ RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 RewriteCond %{HTTP_HOST} ^chatellier\\.fr$ [NC]
 RewriteRule ^ https://www.chatellier.fr%{REQUEST_URI} [L,R=301]
 
-# Anciennes adresses WordPress -> nouvelles pages (a completer)
-# RewriteRule ^ancienne-page/?$ /nouvelle-page/ [R=301,L]
+# Anciennes adresses WordPress -> nouvelles pages (liste dans generator/redirects.txt)
+""" + REDIRECTS + """
 
 <IfModule mod_deflate.c>
   AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json image/svg+xml text/plain application/xml
