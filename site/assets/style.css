@@ -180,3 +180,9 @@ blockquote p{margin:0 0 12px}
 .legal{font-family:'Special Elite',monospace;font-size:13px;width:100%;margin-top:4px}
 .legal a{color:var(--sun)}
 .linkbtn{background:none;border:0;color:var(--sun);font:inherit;text-decoration:underline;cursor:pointer;padding:0}
+#consent .cfg{display:grid;gap:10px;margin-bottom:14px;padding:12px;border:2px dashed var(--ink)}
+#consent .cfg[hidden]{display:none}
+#consent .cfg label{display:flex;gap:10px;align-items:center;font-size:15px;cursor:pointer}
+#consent .cfg input{width:20px;height:20px;accent-color:var(--flash)}
+#consent .cfg .btn{justify-self:start}
+code{font-family:'Special Elite',monospace;background:#fff;padding:0 4px}

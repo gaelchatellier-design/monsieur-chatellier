@@ -12,7 +12,8 @@ Refonte de chatellier.fr : la maison de Monsieur Châtellier (chroniques OK Boom
 - Livre : page dédiée quand le titre et la date de sortie sont connus
 
 ## Cookies et vie privée
-- Bandeau de consentement (`site/assets/consent.js`) : choix conservé 6 mois, boutons « Tout refuser » et « Tout accepter » équivalents, lien « Gérer mes cookies » en pied de page
+- Bandeau de consentement (`site/assets/consent.js`) : choix conservé 6 mois, boutons « Tout refuser », « Personnaliser » et « Tout accepter » équivalents, lien « Gérer mes cookies » en pied de page
+- Google Analytics 4 (ID dans le générateur, `GA_ID`) : chargé seulement après accord, signaux Google désactivés, cookies limités à 13 mois
 - Les lecteurs YouTube et Instagram ne se chargent qu'après accord (ou au clic sur « Charger »)
 - Polices auto-hébergées (aucune requête vers Google Fonts)
 - Page `site/confidentialite/`
