@@ -333,6 +333,46 @@ write("confidentialite/index.html", page(1, "confidentialite/", "Confidentialit�
       "Cookies, contenus tiers (YouTube, Instagram) et données personnelles sur le site de Monsieur Châtellier.", priv_body,
       [crumbs([("Accueil", BASE + "/"), ("Confidentialité et cookies", BASE + "/confidentialite/")])]))
 
+# ---------- 404 + .htaccess (Apache / OVH)
+import re
+nf_body = """<div class="wrap article-wrap">
+<h1>Page introuvable</h1>
+<p class="lead">Cette page n’existe pas ou a changé d’adresse. Le plus simple : repartir de l’accueil ou lire les chroniques OK Boomer.</p>
+<p class="mt links"><a class="btn" href="./">Accueil</a><a class="btn alt" href="chroniques/">Les chroniques</a></p>
+</div>"""
+nf = page(0, "404.html", "Page introuvable — Monsieur Châtellier", "Page introuvable sur le site de Monsieur Châtellier.", nf_body, [], robots_index=False)
+nf = re.sub(r'(href|src)="(?!https?:|mailto:|#|/)(?:\./)?', r'\1="/', nf).replace('data-home=""', 'data-home="/"')
+write("404.html", nf)
+write(".htaccess", """# Pas de liste de dossiers
+Options -Indexes
+ErrorDocument 404 /404.html
+DirectoryIndex index.html
+
+RewriteEngine On
+# Toujours en HTTPS
+RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP:X-Forwarded-Proto} !https
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# chatellier.fr -> www.chatellier.fr (seulement le domaine nu, pas les sous-domaines de test)
+RewriteCond %{HTTP_HOST} ^chatellier\\.fr$ [NC]
+RewriteRule ^ https://www.chatellier.fr%{REQUEST_URI} [L,R=301]
+
+# Anciennes adresses WordPress -> nouvelles pages (a completer)
+# RewriteRule ^ancienne-page/?$ /nouvelle-page/ [R=301,L]
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json image/svg+xml text/plain application/xml
+</IfModule>
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+  ExpiresByType image/jpeg "access plus 1 month"
+  ExpiresByType font/woff2 "access plus 1 year"
+</IfModule>
+""")
+
 # ---------- robots, sitemap, llms
 write("robots.txt", "User-agent: *\nAllow: /\n\nSitemap: %s/sitemap.xml\n" % BASE)
 urls = ["", "a-propos/", "confidentialite/"] + ["chroniques/%s/" % c["slug"] for c in CHRONIQUES if c["complete"]]

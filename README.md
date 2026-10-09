@@ -24,3 +24,9 @@ Le dossier `site/` est produit par `generator/` (HTML, CSS et images sources) :
     python3 generator/build.py site prod
 
 Pour une version ouvrable en double-clic (liens en `index.html`) : `python3 generator/build.py apercu local`.
+
+## Déploiement sur OVH
+Chaque fusion sur `main` envoie `site/` par FTPS sur OVH (`.github/workflows/deploy.yml`).
+Réglages GitHub (Settings → Secrets and variables → Actions) :
+- Secrets : `FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD` (identifiants FTP de l'hébergement OVH)
+- Variable : `FTP_DIR` (dossier cible sur OVH, ex. `www-nouveau/` pour tester, puis `www/`)
