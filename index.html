@@ -38,11 +38,14 @@
     <h1 id="h1">Monsieur Châtellier, plus jeune <em>boomer</em> de France</h1>
     <p class="lead">Monsieur Châtellier est un personnage né sous Pompidou, élevé sous Giscard, propulsé par Mitterrand et mentoré par le grand Jacques. Auteur des chroniques OK Boomer depuis 2019, il publie aussi des vlogs et prépare un livre.</p>
     <p class="baseline">Ubercool skater · Autobiographe · Humain</p>
-    <form class="signup" action="https://monsieurchatellier.substack.com/subscribe" method="get" target="_blank" rel="noopener">
+    <form class="signup" id="abonnement" action="https://monsieurchatellier.substack.com/api/v1/free?nojs=true" method="post" target="_blank" rel="noopener">
   <label for="mail">Reçois les chroniques OK Boomer</label>
-  <div class="row"><input id="mail" name="email" type="email" placeholder="ton@email.fr" required>
+  <div class="row"><input id="mail" name="email" type="email" placeholder="ton@email.fr" autocomplete="email" required>
+  <input type="hidden" name="first_url" value="https://www.chatellier.fr/"><input type="hidden" name="first_referrer" value="">
+  <input type="hidden" name="current_url" value="https://www.chatellier.fr/"><input type="hidden" name="current_referrer" value="">
+  <input type="hidden" name="referral_code" value=""><input type="hidden" name="source" value="embed">
   <button class="btn" type="submit">Je m'abonne</button></div>
-  <small>Newsletter gratuite, envoyée par e-mail via Substack.</small>
+  <small>Newsletter gratuite. Un e-mail de confirmation t’est envoyé par Substack.</small>
 </form>
   </div>
 </section>
@@ -86,7 +89,7 @@
     <div class="cover" aria-hidden="true"><span>Monsieur Châtellier</span><h3>OK Boomer</h3><span>Le recueil · illustrations de Gilles Rapaport</span></div>
     <div><h2 id="h-livre">Le livre arrive</h2>
     <p class="wide">Les chroniques OK Boomer seront réunies dans un recueil, avec les dessins de Gilles Rapaport. Abonne-toi à la newsletter pour être prévenu de la sortie.</p>
-    <a class="btn" href="https://monsieurchatellier.substack.com/subscribe" target="_blank" rel="noopener">Me prévenir de la sortie</a></div>
+    <a class="btn" href="#abonnement">Me prévenir de la sortie</a></div>
   </div>
 </section>
 </div>
