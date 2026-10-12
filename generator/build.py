@@ -111,13 +111,18 @@ def page(depth, path, title, desc, body, schema, robots_index=True, image="asset
 """ % dict(title=esc(title), desc=esc(desc), canon=canon, robots=robots, base=BASE, image=image, ss=SUBSTACK, pre=pre, ld=ld,
            home=href(depth, ""), nav=nav, body=body, yt=YT, ig=IG, li=LI, priv=href(depth, "confidentialite/"), ga=GA_ID)
 
-def signup(label="Reçois les chroniques OK Boomer"):
-    return """<form class="signup" action="%s/subscribe" method="get" target="_blank" rel="noopener">
-  <label for="mail">%s</label>
-  <div class="row"><input id="mail" name="email" type="email" placeholder="ton@email.fr" required>
+def signup(label="Reçois les chroniques OK Boomer", anchor=False):
+    # Inscription gratuite directe : le formulaire envoie l'adresse à Substack (même requête que leur formulaire intégré),
+    # sans passer par la page de soutien payant. Rien n'est chargé chez Substack avant l'envoi.
+    return """<form class="signup"%(idattr)s action="%(ss)s/api/v1/free?nojs=true" method="post" target="_blank" rel="noopener">
+  <label for="mail">%(label)s</label>
+  <div class="row"><input id="mail" name="email" type="email" placeholder="ton@email.fr" autocomplete="email" required>
+  <input type="hidden" name="first_url" value="%(base)s/"><input type="hidden" name="first_referrer" value="">
+  <input type="hidden" name="current_url" value="%(base)s/"><input type="hidden" name="current_referrer" value="">
+  <input type="hidden" name="referral_code" value=""><input type="hidden" name="source" value="embed">
   <button class="btn" type="submit">Je m'abonne</button></div>
-  <small>Newsletter gratuite, envoyée par e-mail via Substack.</small>
-</form>""" % (SUBSTACK, label)
+  <small>Newsletter gratuite. Un e-mail de confirmation t’est envoyé par Substack.</small>
+</form>""" % dict(ss=SUBSTACK, label=label, base=BASE, idattr=' id="abonnement"' if anchor else "")
 
 def ph(provider, url, label, what):
     return ('<div class="ph"><p><strong>Contenu %s</strong><br>Ce contenu est hébergé par %s, qui peut déposer des cookies. Il se charge si tu l’autorises.</p>'
@@ -196,10 +201,10 @@ home_body = """<div class="wrap">
     <div class="cover" aria-hidden="true"><span>Monsieur Châtellier</span><h3>OK Boomer</h3><span>Le recueil · illustrations de Gilles Rapaport</span></div>
     <div><h2 id="h-livre">Le livre arrive</h2>
     <p class="wide">Les chroniques OK Boomer seront réunies dans un recueil, avec les dessins de Gilles Rapaport. Abonne-toi à la newsletter pour être prévenu de la sortie.</p>
-    <a class="btn" href="%s/subscribe" target="_blank" rel="noopener">Me prévenir de la sortie</a></div>
+    <a class="btn" href="#abonnement">Me prévenir de la sortie</a></div>
   </div>
 </section>
-</div>""" % (signup(), href(0, "chroniques/"), cards, href(0, "chroniques/"), YT_ID, esc(YT_TITLE), ph("YouTube (Google)", "https://www.youtube.com/watch?v=" + YT_ID, "Regarder sur YouTube", "la vidéo"), esc(YT_TITLE), esc(YT_DESC), IG_REELS[0], ph("Instagram (Meta)", "https://www.instagram.com/reel/" + IG_REELS[0] + "/", "Voir sur Instagram", "le reel"), IG_REELS[1], ph("Instagram (Meta)", "https://www.instagram.com/reel/" + IG_REELS[1] + "/", "Voir sur Instagram", "le reel"), YT, IG, SUBSTACK)
+</div>""" % (signup(anchor=True), href(0, "chroniques/"), cards, href(0, "chroniques/"), YT_ID, esc(YT_TITLE), ph("YouTube (Google)", "https://www.youtube.com/watch?v=" + YT_ID, "Regarder sur YouTube", "la vidéo"), esc(YT_TITLE), esc(YT_DESC), IG_REELS[0], ph("Instagram (Meta)", "https://www.instagram.com/reel/" + IG_REELS[0] + "/", "Voir sur Instagram", "le reel"), IG_REELS[1], ph("Instagram (Meta)", "https://www.instagram.com/reel/" + IG_REELS[1] + "/", "Voir sur Instagram", "le reel"), YT, IG)
 
 home_schema = [
     {"@context": "https://schema.org", "@type": "WebSite", "@id": BASE + "/#site", "url": BASE + "/", "name": "Monsieur Châtellier",
@@ -322,7 +327,7 @@ priv_body = """<div class="wrap article-wrap">
 <h2>Contenus de services tiers</h2>
 <p>Certaines pages intègrent des vidéos YouTube (Google) et des reels Instagram (Meta). Ces services peuvent déposer des cookies et collecter des données, dont ton adresse IP, lorsque leur contenu s’affiche. Par défaut, ces contenus ne sont pas chargés : un bouton te permet de les afficher, ou tu peux les regarder directement sur YouTube ou Instagram. Tu peux autoriser leur chargement automatique avec « Tout accepter » ou « Personnaliser ».</p>
 <h2>Newsletter</h2>
-<p>Le formulaire d’inscription t’envoie sur Substack, qui reçoit ton adresse e-mail et la traite selon sa propre politique de confidentialité. Ce site ne conserve pas ton adresse e-mail.</p>
+<p>Quand tu envoies le formulaire d’inscription, ton adresse e-mail est transmise à Substack, qui la traite selon sa propre politique de confidentialité. Rien n’est envoyé à Substack avant que tu valides le formulaire, et ce site ne conserve pas ton adresse e-mail.</p>
 <h2>Modifier ton choix</h2>
 <p>Tu peux changer d’avis à tout moment avec le bouton ci-dessous.</p>
 <p><button type="button" class="btn alt" data-consent-open>Gérer mes cookies</button></p>

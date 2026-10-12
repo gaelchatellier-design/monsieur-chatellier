@@ -41,11 +41,14 @@
 
 <div class="cta"><h2>La suite dans la newsletter</h2>
 <p>Cette chronique est publiée en entier dans la newsletter de Monsieur Châtellier, avec l'illustration complète.</p>
-<form class="signup" action="https://monsieurchatellier.substack.com/subscribe" method="get" target="_blank" rel="noopener">
+<form class="signup" action="https://monsieurchatellier.substack.com/api/v1/free?nojs=true" method="post" target="_blank" rel="noopener">
   <label for="mail">Reçois les chroniques OK Boomer</label>
-  <div class="row"><input id="mail" name="email" type="email" placeholder="ton@email.fr" required>
+  <div class="row"><input id="mail" name="email" type="email" placeholder="ton@email.fr" autocomplete="email" required>
+  <input type="hidden" name="first_url" value="https://www.chatellier.fr/"><input type="hidden" name="first_referrer" value="">
+  <input type="hidden" name="current_url" value="https://www.chatellier.fr/"><input type="hidden" name="current_referrer" value="">
+  <input type="hidden" name="referral_code" value=""><input type="hidden" name="source" value="embed">
   <button class="btn" type="submit">Je m'abonne</button></div>
-  <small>Newsletter gratuite, envoyée par e-mail via Substack.</small>
+  <small>Newsletter gratuite. Un e-mail de confirmation t’est envoyé par Substack.</small>
 </form>
 <p class="mt"><a class="btn alt" href="https://monsieurchatellier.substack.com" target="_blank" rel="noopener">Lire sur Substack</a></p></div>
 </article>
