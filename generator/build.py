@@ -101,9 +101,11 @@ def page(depth, path, title, desc, body, schema, robots_index=True, image="asset
 <meta property="og:image" content="%(base)s/%(image)s">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="alternate" type="application/rss+xml" title="Les chroniques OK Boomer (Substack)" href="%(ss)s/feed">
-<link rel="icon" href="%(pre)sfavicon.ico" sizes="16x16 32x32">
+<link rel="icon" href="%(pre)sfavicon.ico" sizes="16x16 32x32 48x48">
 <link rel="icon" type="image/png" sizes="32x32" href="%(pre)sfavicon-32.png">
 <link rel="apple-touch-icon" href="%(pre)sapple-touch-icon.png">
+<link rel="manifest" href="%(pre)ssite.webmanifest">
+<meta name="theme-color" content="#efeadf">
 <link rel="preload" href="%(pre)sassets/fonts/bebas-neue-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="%(pre)sassets/fonts.css">
 <link rel="stylesheet" href="%(pre)sassets/style.css">
@@ -169,7 +171,7 @@ shutil.copy(os.path.join(GEN, "fonts.css"), os.path.join(OUT, "assets/fonts.css"
 shutil.copytree(os.path.join(GEN, "fonts"), os.path.join(OUT, "assets/fonts"))
 shutil.copy(os.path.join(GEN, "portrait.jpg"), os.path.join(OUT, "assets/portrait.jpg"))
 shutil.copy(os.path.join(GEN, "apropos.jpg"), os.path.join(OUT, "assets/apropos.jpg"))
-for _f in ("favicon.ico", "favicon-32.png", "apple-touch-icon.png"):
+for _f in ("favicon.ico", "favicon-32.png", "apple-touch-icon.png", "icon-192.png", "icon-512.png", "site.webmanifest"):
     shutil.copy(os.path.join(GEN, _f), os.path.join(OUT, _f))
 for _c in CHRONIQUES:
     shutil.copy(os.path.join(GEN, _c["slug"] + ".jpg"), os.path.join(OUT, "assets/%s.jpg" % _c["slug"]))

@@ -1,0 +1,14 @@
+{
+  "name": "Monsieur Châtellier",
+  "short_name": "M. Châtellier",
+  "description": "Chroniques OK Boomer, vlogs et livre de Monsieur Châtellier.",
+  "lang": "fr",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#efeadf",
+  "theme_color": "#efeadf",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
