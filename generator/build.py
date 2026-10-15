@@ -81,7 +81,7 @@ def page(depth, path, title, desc, body, schema, robots_index=True, image="asset
     robots = "index, follow, max-image-preview:large" if robots_index else "noindex, follow"
     ld = "".join('<script type="application/ld+json">%s</script>\n' % json.dumps(s, ensure_ascii=False) for s in schema)
     items = [(href(depth, "chroniques/"), "Lire"), (href(depth, "") + "#regarder", "Regarder"),
-             (href(depth, "") + "#livre", "Le livre"), (href(depth, "a-propos/"), "À propos"), ("#contact", "Contact")]
+             (href(depth, "") + "#livre", "Le livre"), (href(depth, "a-propos/"), "À propos")]
     nav = "".join('<a href="%s">%s</a>' % (u, l) for u, l in items)
     return """<!doctype html>
 <html lang="fr">
