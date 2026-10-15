@@ -226,7 +226,7 @@ home_body = """<div class="wrap">
   <div class="book">
     <div class="cover" aria-hidden="true"><span>Monsieur Châtellier</span><h3>OK Boomer</h3><span>Le recueil · illustrations de Gilles&nbsp;Rapaport</span></div>
     <div><h2 id="h-livre">Le livre arrive</h2>
-    <p class="wide">Les chroniques OK Boomer seront réunies dans un recueil, avec les dessins de Gilles Rapaport. Abonnez-vous à la newsletter pour être prévenu·e de la sortie.</p>
+    <p class="wide">Les chroniques OK Boomer seront réunies dans un recueil, avec les dessins de Gilles Rapaport. Abonnez-vous à la newsletter pour être prévenue de la sortie.</p>
     <a class="btn" href="https://monsieurchatellier.substack.com/?email=" target="_blank" rel="noopener">Me prévenir de la sortie</a></div>
   </div>
 </section>
