@@ -87,3 +87,14 @@ blockquote p{margin:0 0 12px}
 #consent .cfg .btn{justify-self:start}
 code{font-family:'Special Elite',monospace;background:#fff;padding:0 4px}
 .photo.small img.asis{filter:none;object-position:50% 25%}
+.article-wrap .lead{margin-bottom:14px}
+
+/* ---- mobile : en-tête fixe, compact ---- */
+@media(max-width:820px){
+  header{position:sticky;top:0;z-index:100}
+  header .wrap{padding:8px 16px;gap:4px 12px}
+  .brand{font-size:26px}
+  nav a{font-size:17px;margin-left:12px}
+  nav a:first-child{margin-left:0}
+  html{scroll-padding-top:96px}
+}
