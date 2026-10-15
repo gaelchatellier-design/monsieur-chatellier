@@ -75,7 +75,7 @@
     banner.setAttribute("aria-labelledby", "consent-t");
     banner.innerHTML =
       '<h2 id="consent-t">Cookies et contenus tiers</h2>' +
-      "<p>Ce site ne dépose aucun cookie publicitaire. Avec ton accord, il mesure son audience (Google Analytics) et affiche les vidéos YouTube et Instagram, des contenus tiers qui peuvent déposer des cookies. " +
+      "<p>Ce site ne dépose aucun cookie publicitaire. Avec votre accord, il mesure son audience (Google Analytics) et affiche les vidéos YouTube et Instagram, des contenus tiers qui peuvent déposer des cookies. " +
       '<a href="' + HOME + "confidentialite/" + (location.protocol === "file:" ? "index.html" : "") + '">En savoir plus</a></p>' +
       '<div class="cfg" hidden>' +
       '<label><input type="checkbox" id="c-m"' + (cur.m ? " checked" : "") + '> Vidéos et contenus tiers (YouTube, Instagram)</label>' +
@@ -98,6 +98,8 @@
   document.addEventListener("click", function (e) {
     var t = e.target;
     if (!t || !t.closest) return;
+    var ab = t.closest('a[href="#abonnement"]');
+    if (ab) setTimeout(function () { var m = document.getElementById("mail"); if (m) m.focus({ preventScroll: true }); }, 500);
     var o = t.closest("[data-consent-open]"); if (o) { e.preventDefault(); show(); return; }
     var b = t.closest(".ph-load"); if (b) { var box = b.closest("[data-embed]"); if (box) load(box); }
   });
