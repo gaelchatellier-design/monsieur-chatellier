@@ -107,8 +107,8 @@ def page(depth, path, title, desc, body, schema, robots_index=True, image="asset
 <link rel="manifest" href="%(pre)ssite.webmanifest">
 <meta name="theme-color" content="#efeadf">
 <link rel="preload" href="%(pre)sassets/fonts/bebas-neue-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="%(pre)sassets/fonts.css">
-<link rel="stylesheet" href="%(pre)sassets/style.css">
+<link rel="stylesheet" href="%(pre)sassets/fonts.css?v=%(vf)s">
+<link rel="stylesheet" href="%(pre)sassets/style.css?v=%(vs)s">
 %(ld)s</head>
 <body>
 <a class="skip" href="#main">Aller au contenu</a>
@@ -128,11 +128,12 @@ def page(depth, path, title, desc, body, schema, robots_index=True, image="asset
   <p class="pro">Et aussi, dans la vraie vie, directeur de projets digitaux → <a href="%(li)s" rel="me noopener" target="_blank">mon profil LinkedIn</a></p>
   <p class="legal"><a href="%(priv)s">Confidentialité et cookies</a> · <button type="button" class="linkbtn" data-consent-open>Gérer mes cookies</button></p>
 </div></footer>
-<script src="%(pre)sassets/consent.js" data-home="%(pre)s" data-ga="%(ga)s" defer></script>
+<script src="%(pre)sassets/consent.js?v=%(vc)s" data-home="%(pre)s" data-ga="%(ga)s" defer></script>
 </body>
 </html>
 """ % dict(title=esc(title), desc=esc(desc), canon=canon, robots=robots, base=BASE, image=image, ss=SUBSTACK, pre=pre, ld=ld,
-           home=href(depth, ""), nav=nav, body=link_rapaport(body), yt=YT, ig=IG, li=LI, priv=href(depth, "confidentialite/"), ga=GA_ID)
+           home=href(depth, ""), nav=nav, body=link_rapaport(body), yt=YT, ig=IG, li=LI, priv=href(depth, "confidentialite/"), ga=GA_ID,
+           vs=ver("style.css"), vf=ver("fonts.css"), vc=ver("consent.js"))
 
 def signup(label="Recevez les chroniques OK Boomer", anchor=False):
     # Inscription gratuite directe : le formulaire envoie l'adresse à Substack (même requête que leur formulaire intégré),
@@ -156,6 +157,11 @@ def write(path, content):
     full = os.path.join(OUT, path)
     os.makedirs(os.path.dirname(full), exist_ok=True)
     open(full, "w", encoding="utf-8").write(content)
+
+def ver(name):
+    import hashlib
+    d = open(os.path.join(OUT, "assets", name), "rb").read()
+    return hashlib.md5(d).hexdigest()[:8]
 
 def crumbs(items):
     """items: [(nom, url_absolue)] -> BreadcrumbList"""
@@ -430,8 +436,8 @@ RewriteRule ^ https://www.chatellier.fr%{REQUEST_URI} [L,R=301]
 <IfModule mod_expires.c>
   ExpiresActive On
   ExpiresByType text/html "access plus 0 seconds"
-  ExpiresByType text/css "access plus 1 month"
-  ExpiresByType application/javascript "access plus 1 month"
+  ExpiresByType text/css "access plus 1 day"
+  ExpiresByType application/javascript "access plus 1 day"
   ExpiresByType image/jpeg "access plus 1 month"
   ExpiresByType font/woff2 "access plus 1 year"
 </IfModule>
