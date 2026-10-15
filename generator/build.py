@@ -165,6 +165,7 @@ shutil.copy(os.path.join(GEN, "consent.js"), os.path.join(OUT, "assets/consent.j
 shutil.copy(os.path.join(GEN, "fonts.css"), os.path.join(OUT, "assets/fonts.css"))
 shutil.copytree(os.path.join(GEN, "fonts"), os.path.join(OUT, "assets/fonts"))
 shutil.copy(os.path.join(GEN, "portrait.jpg"), os.path.join(OUT, "assets/portrait.jpg"))
+shutil.copy(os.path.join(GEN, "apropos.jpg"), os.path.join(OUT, "assets/apropos.jpg"))
 for _c in CHRONIQUES:
     shutil.copy(os.path.join(GEN, _c["slug"] + ".jpg"), os.path.join(OUT, "assets/%s.jpg" % _c["slug"]))
 
@@ -307,13 +308,19 @@ FAQ = [
     ("Un livre est-il prévu ?",
      "Oui. Un livre recueil des chroniques OK Boomer est à venir. L'annonce de sa sortie sera faite dans la newsletter."),
 ]
-faq_html = "".join("<h3>%s</h3><p>%s</p>" % (esc(q), esc(a)) for q, a in FAQ)
+def faq_links(t):
+    t = t.replace(SUBSTACK, '<a href="%s" target="_blank" rel="me noopener">%s</a>' % (SUBSTACK, SUBSTACK))
+    t = t.replace("@GaelChatellier", '<a href="%s" target="_blank" rel="me noopener">@GaelChatellier</a>' % YT)
+    t = t.replace("@monsieurchatellier", '<a href="%s" target="_blank" rel="me noopener">@monsieurchatellier</a>' % IG)
+    return t
+
+faq_html = "".join("<h3>%s</h3><p>%s</p>" % (esc(q), faq_links(esc(a))) for q, a in FAQ)
 about_body = """<div class="wrap article-wrap">
 <nav class="crumbs" aria-label="Fil d'Ariane"><a href="%s">Accueil</a> › À propos</nav>
 <h1>À propos de Monsieur Châtellier</h1>
 <p class="lead">Monsieur Châtellier, un personnage né sous Pompidou, élevé sous Giscard, propulsé par Mitterrand et mentoré par le grand Jacques.</p>
 <div class="about-grid">
-<div class="photo small"><img src="%sassets/portrait.jpg" width="1275" height="1768" loading="lazy" alt="Portrait de Monsieur Châtellier, cheveux gris et barbe blanche"></div>
+<div class="photo small"><img class="asis" src="%sassets/apropos.jpg" width="800" height="1200" loading="lazy" alt="Portrait de profil de Monsieur Châtellier, barbe grise et cheveux plaqués en arrière, en noir et blanc"></div>
 <div>
 <p>J'écris des chroniques depuis 2019 pour essayer de comprendre ce qui m'est arrivé, nous est arrivé peut-être ?, depuis l'époque des culottes courtes, des osselets et des cacolacs partagés avec les copains et copines qui s'appelaient Didier, Vincent, Hélène ou Valérie.</p>
 <p>Une correctrice m'accompagne pour garder lisible tout ce que j'écris. Les chroniques sont illustrées par Gilles Rapaport, dessinateur de presse et illustrateur de renom.</p>
