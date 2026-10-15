@@ -6,6 +6,7 @@
 - [Accueil](https://www.chatellier.fr/): présentation, chroniques, vidéos, livre à venir
 - [À propos](https://www.chatellier.fr/a-propos/): qui est Monsieur Châtellier, questions fréquentes
 - [Chroniques OK Boomer](https://www.chatellier.fr/chroniques/): extraits des chroniques
+- [Newsletter « Lettres d’un jeune boomer »](https://www.chatellier.fr/newsletter/): inscription gratuite à la newsletter
 
 ## Liens officiels
 - [Newsletter (Substack)](https://monsieurchatellier.substack.com)
