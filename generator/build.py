@@ -1,4 +1,4 @@
-import json, os, sys, shutil, html
+import json, os, re, sys, shutil, html
 
 OUT = sys.argv[1]            # dossier de sortie
 LOCAL = sys.argv[2] == "local"   # liens en index.html pour ouvrir sans serveur
@@ -49,6 +49,24 @@ def href(depth, path):
         path += "index.html"
     return (pre + path) or "./"
 
+RAP_URL = "https://dessins-rapaport.com/"
+RAP_LINK = '<a href="%s" target="_blank" rel="noopener">Gilles Rapaport</a>' % RAP_URL
+
+def link_rapaport(html_text):
+    """Remplace « Gilles Rapaport » par un lien dans le texte visible : jamais dans une balise (alt...), un lien déjà présent ou un script."""
+    out, in_a, in_script = [], 0, False
+    for part in re.split(r"(<[^>]+>)", html_text):
+        if part.startswith("<"):
+            low = part.lower()
+            if low.startswith("<a ") or low == "<a>": in_a += 1
+            elif low.startswith("</a"): in_a = max(0, in_a - 1)
+            elif low.startswith("<script") or low.startswith("<style") or low.startswith("<title"): in_script = True
+            elif low.startswith("</script") or low.startswith("</style") or low.startswith("</title"): in_script = False
+            out.append(part)
+        else:
+            out.append(part if (in_a or in_script) else part.replace("Gilles Rapaport", RAP_LINK))
+    return "".join(out)
+
 PERSON = {
     "@type": "Person", "@id": BASE + "/#gael",
     "name": "Gaël Châtellier", "alternateName": "Monsieur Châtellier",
@@ -63,7 +81,7 @@ def page(depth, path, title, desc, body, schema, robots_index=True, image="asset
     robots = "index, follow, max-image-preview:large" if robots_index else "noindex, follow"
     ld = "".join('<script type="application/ld+json">%s</script>\n' % json.dumps(s, ensure_ascii=False) for s in schema)
     items = [(href(depth, "chroniques/"), "Lire"), (href(depth, "") + "#regarder", "Regarder"),
-             (href(depth, "") + "#livre", "Le livre"), (href(depth, "a-propos/"), "À propos"), ("#contact", "Contact")]
+             (href(depth, "") + "#livre", "Le livre"), (href(depth, "a-propos/"), "À propos")]
     nav = "".join('<a href="%s">%s</a>' % (u, l) for u, l in items)
     return """<!doctype html>
 <html lang="fr">
@@ -83,6 +101,11 @@ def page(depth, path, title, desc, body, schema, robots_index=True, image="asset
 <meta property="og:image" content="%(base)s/%(image)s">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="alternate" type="application/rss+xml" title="Les chroniques OK Boomer (Substack)" href="%(ss)s/feed">
+<link rel="icon" href="%(pre)sfavicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="%(pre)sfavicon-32.png">
+<link rel="apple-touch-icon" href="%(pre)sapple-touch-icon.png">
+<link rel="manifest" href="%(pre)ssite.webmanifest">
+<meta name="theme-color" content="#efeadf">
 <link rel="preload" href="%(pre)sassets/fonts/bebas-neue-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="%(pre)sassets/fonts.css">
 <link rel="stylesheet" href="%(pre)sassets/style.css">
@@ -109,23 +132,23 @@ def page(depth, path, title, desc, body, schema, robots_index=True, image="asset
 </body>
 </html>
 """ % dict(title=esc(title), desc=esc(desc), canon=canon, robots=robots, base=BASE, image=image, ss=SUBSTACK, pre=pre, ld=ld,
-           home=href(depth, ""), nav=nav, body=body, yt=YT, ig=IG, li=LI, priv=href(depth, "confidentialite/"), ga=GA_ID)
+           home=href(depth, ""), nav=nav, body=link_rapaport(body), yt=YT, ig=IG, li=LI, priv=href(depth, "confidentialite/"), ga=GA_ID)
 
-def signup(label="Reçois les chroniques OK Boomer", anchor=False):
+def signup(label="Recevez les chroniques OK Boomer", anchor=False):
     # Inscription gratuite directe : le formulaire envoie l'adresse à Substack (même requête que leur formulaire intégré),
     # sans passer par la page de soutien payant. Rien n'est chargé chez Substack avant l'envoi.
     return """<form class="signup"%(idattr)s action="%(ss)s/api/v1/free?nojs=true" method="post" target="_blank" rel="noopener">
   <label for="mail">%(label)s</label>
-  <div class="row"><input id="mail" name="email" type="email" placeholder="ton@email.fr" autocomplete="email" required>
+  <div class="row"><input id="mail" name="email" type="email" placeholder="votre@email.fr" autocomplete="email" required>
   <input type="hidden" name="first_url" value="%(base)s/"><input type="hidden" name="first_referrer" value="">
   <input type="hidden" name="current_url" value="%(base)s/"><input type="hidden" name="current_referrer" value="">
   <input type="hidden" name="referral_code" value=""><input type="hidden" name="source" value="embed">
   <button class="btn" type="submit">Je m'abonne</button></div>
-  <small>Newsletter gratuite. Un e-mail de confirmation t’est envoyé par Substack.</small>
+  <small>Newsletter gratuite. Un e-mail de confirmation vous est envoyé par Substack.</small>
 </form>""" % dict(ss=SUBSTACK, label=label, base=BASE, idattr=' id="abonnement"' if anchor else "")
 
 def ph(provider, url, label, what):
-    return ('<div class="ph"><p><strong>Contenu %s</strong><br>Ce contenu est hébergé par %s, qui peut déposer des cookies. Il se charge si tu l’autorises.</p>'
+    return ('<div class="ph"><p><strong>Contenu %s</strong><br>Ce contenu est hébergé par %s, qui peut déposer des cookies. Il se charge si vous l’autorisez.</p>'
             '<div class="phr"><button type="button" class="btn alt ph-load">Charger %s</button>'
             '<a href="%s" target="_blank" rel="noopener">%s</a></div></div>') % (provider.split(" ")[0], provider, what, url, label)
 
@@ -147,6 +170,9 @@ shutil.copy(os.path.join(GEN, "consent.js"), os.path.join(OUT, "assets/consent.j
 shutil.copy(os.path.join(GEN, "fonts.css"), os.path.join(OUT, "assets/fonts.css"))
 shutil.copytree(os.path.join(GEN, "fonts"), os.path.join(OUT, "assets/fonts"))
 shutil.copy(os.path.join(GEN, "portrait.jpg"), os.path.join(OUT, "assets/portrait.jpg"))
+shutil.copy(os.path.join(GEN, "apropos.jpg"), os.path.join(OUT, "assets/apropos.jpg"))
+for _f in ("favicon.ico", "favicon-32.png", "apple-touch-icon.png", "icon-192.png", "icon-512.png", "site.webmanifest"):
+    shutil.copy(os.path.join(GEN, _f), os.path.join(OUT, _f))
 for _c in CHRONIQUES:
     shutil.copy(os.path.join(GEN, _c["slug"] + ".jpg"), os.path.join(OUT, "assets/%s.jpg" % _c["slug"]))
 
@@ -198,10 +224,10 @@ home_body = """<div class="wrap">
 </section>
 <section class="block" id="livre" aria-labelledby="h-livre">
   <div class="book">
-    <div class="cover" aria-hidden="true"><span>Monsieur Châtellier</span><h3>OK Boomer</h3><span>Le recueil · illustrations de Gilles Rapaport</span></div>
+    <div class="cover" aria-hidden="true"><span>Monsieur Châtellier</span><h3>OK Boomer</h3><span>Le recueil · illustrations de Gilles&nbsp;Rapaport</span></div>
     <div><h2 id="h-livre">Le livre arrive</h2>
-    <p class="wide">Les chroniques OK Boomer seront réunies dans un recueil, avec les dessins de Gilles Rapaport. Abonne-toi à la newsletter pour être prévenu de la sortie.</p>
-    <a class="btn" href="#abonnement">Me prévenir de la sortie</a></div>
+    <p class="wide">Les chroniques OK Boomer seront réunies dans un recueil, avec les dessins de Gilles Rapaport. Abonnez-vous à la newsletter pour être prévenue de la sortie.</p>
+    <a class="btn" href="https://monsieurchatellier.substack.com/?email=" target="_blank" rel="noopener">Me prévenir de la sortie</a></div>
   </div>
 </section>
 </div>""" % (signup(anchor=True), href(0, "chroniques/"), cards, href(0, "chroniques/"), YT_ID, esc(YT_TITLE), ph("YouTube (Google)", "https://www.youtube.com/watch?v=" + YT_ID, "Regarder sur YouTube", "la vidéo"), esc(YT_TITLE), esc(YT_DESC), IG_REELS[0], ph("Instagram (Meta)", "https://www.instagram.com/reel/" + IG_REELS[0] + "/", "Voir sur Instagram", "le reel"), IG_REELS[1], ph("Instagram (Meta)", "https://www.instagram.com/reel/" + IG_REELS[1] + "/", "Voir sur Instagram", "le reel"), YT, IG)
@@ -226,7 +252,7 @@ list_body = """<div class="wrap article-wrap">
 <p class="lead">Les chroniques OK Boomer sont des capsules humoristiques de Monsieur Châtellier, envoyées par e-mail depuis 2019. Ce sont de petites pièces sur le temps qui a passé, souvenirs d'autres époques qui ont forgé son humanité (et la vôtre ?). Elles sont illustrées par Gilles Rapaport, illustrateur et dessinateur de presse.</p>
 <div class="chroniques mt">%s</div>
 <div class="mt">%s</div>
-</div>""" % (href(1, ""), list_cards.replace('href="chroniques/', 'href="').replace(href(0, "chroniques/"), "./"), signup("Lire les chroniques en entier, dans ta boîte mail"))
+</div>""" % (href(1, ""), list_cards.replace('href="chroniques/', 'href="').replace(href(0, "chroniques/"), "./"), signup("Lire les chroniques en entier, dans votre boîte mail"))
 # liens relatifs depuis /chroniques/
 list_body = list_body.replace('href="%s' % href(0, "chroniques/"), 'href="')
 lst = []
@@ -265,7 +291,7 @@ for c in CHRONIQUES:
 </div>""" % (href(2, ""), href(2, "chroniques/"), esc(c["title"]), esc(c["title"]), "../../", c["slug"], esc(c["alt"]), paras, todo, signup(), SUBSTACK, others)
     art = {"@context": "https://schema.org", "@type": "Article", "headline": c["title"], "url": url, "inLanguage": "fr-FR",
            "mainEntityOfPage": url, "author": {"@id": BASE + "/#gael"},
-           "contributor": {"@type": "Person", "name": "Gilles Rapaport", "description": "Illustrateur et dessinateur de presse"},
+           "contributor": {"@type": "Person", "name": "Gilles Rapaport", "url": RAP_URL, "sameAs": [RAP_URL], "description": "Illustrateur et dessinateur de presse"},
            "isPartOf": {"@type": "CreativeWorkSeries", "name": "Chroniques OK Boomer", "url": BASE + "/chroniques/"},
            "image": BASE + "/assets/%s.jpg" % c["slug"], "publisher": {"@id": BASE + "/#gael"}}
     write("chroniques/%s/index.html" % c["slug"], page(2, "chroniques/%s/" % c["slug"], c["title"] + " — Chronique OK Boomer", desc, body,
@@ -289,13 +315,19 @@ FAQ = [
     ("Un livre est-il prévu ?",
      "Oui. Un livre recueil des chroniques OK Boomer est à venir. L'annonce de sa sortie sera faite dans la newsletter."),
 ]
-faq_html = "".join("<h3>%s</h3><p>%s</p>" % (esc(q), esc(a)) for q, a in FAQ)
+def faq_links(t):
+    t = t.replace(SUBSTACK, '<a href="%s" target="_blank" rel="me noopener">%s</a>' % (SUBSTACK, SUBSTACK))
+    t = t.replace("@GaelChatellier", '<a href="%s" target="_blank" rel="me noopener">@GaelChatellier</a>' % YT)
+    t = t.replace("@monsieurchatellier", '<a href="%s" target="_blank" rel="me noopener">@monsieurchatellier</a>' % IG)
+    return t
+
+faq_html = "".join("<h3>%s</h3><p>%s</p>" % (esc(q), faq_links(esc(a))) for q, a in FAQ)
 about_body = """<div class="wrap article-wrap">
 <nav class="crumbs" aria-label="Fil d'Ariane"><a href="%s">Accueil</a> › À propos</nav>
 <h1>À propos de Monsieur Châtellier</h1>
 <p class="lead">Monsieur Châtellier, un personnage né sous Pompidou, élevé sous Giscard, propulsé par Mitterrand et mentoré par le grand Jacques.</p>
 <div class="about-grid">
-<div class="photo small"><img src="%sassets/portrait.jpg" width="1275" height="1768" loading="lazy" alt="Portrait de Monsieur Châtellier, cheveux gris et barbe blanche"></div>
+<div class="photo small"><img class="asis" src="%sassets/apropos.jpg" width="800" height="1200" loading="lazy" alt="Portrait de profil de Monsieur Châtellier, barbe grise et cheveux plaqués en arrière, en noir et blanc"></div>
 <div>
 <p>J'écris des chroniques depuis 2019 pour essayer de comprendre ce qui m'est arrivé, nous est arrivé peut-être ?, depuis l'époque des culottes courtes, des osselets et des cacolacs partagés avec les copains et copines qui s'appelaient Didier, Vincent, Hélène ou Valérie.</p>
 <p>Une correctrice m'accompagne pour garder lisible tout ce que j'écris. Les chroniques sont illustrées par Gilles Rapaport, dessinateur de presse et illustrateur de renom.</p>
@@ -321,18 +353,18 @@ priv_body = """<div class="wrap article-wrap">
 <h1>Confidentialité et cookies</h1>
 <p class="lead">Ce site est édité par Gaël Châtellier (Monsieur Châtellier). Contact : <a href="mailto:gael@chatellier.fr">gael@chatellier.fr</a>.</p>
 <h2>Ce que le site dépose lui-même</h2>
-<p>Le site ne dépose aucun cookie publicitaire. Les polices de caractères sont hébergées sur le site. Ton choix sur les cookies est conservé dans ton navigateur (stockage local) pendant 6 mois.</p>
+<p>Le site ne dépose aucun cookie publicitaire. Les polices de caractères sont hébergées sur le site. Votre choix sur les cookies est conservé dans votre navigateur (stockage local) pendant 6 mois.</p>
 <h2>Mesure d’audience (Google Analytics)</h2>
-<p>Avec ton accord uniquement, le site utilise Google Analytics 4 (Google) pour connaître sa fréquentation : pages consultées, provenance approximative, type d’appareil. Les signaux Google et la personnalisation publicitaire sont désactivés. Les cookies de mesure (<code>_ga</code>) durent au maximum 13 mois et les données sont conservées 14 mois. Si tu refuses, aucune donnée n’est envoyée à Google Analytics.</p>
+<p>Avec votre accord uniquement, le site utilise Google Analytics 4 (Google) pour connaître sa fréquentation : pages consultées, provenance approximative, type d’appareil. Les signaux Google et la personnalisation publicitaire sont désactivés. Les cookies de mesure (<code>_ga</code>) durent au maximum 13 mois et les données sont conservées 14 mois. Si vous refusez, aucune donnée n’est envoyée à Google Analytics.</p>
 <h2>Contenus de services tiers</h2>
-<p>Certaines pages intègrent des vidéos YouTube (Google) et des reels Instagram (Meta). Ces services peuvent déposer des cookies et collecter des données, dont ton adresse IP, lorsque leur contenu s’affiche. Par défaut, ces contenus ne sont pas chargés : un bouton te permet de les afficher, ou tu peux les regarder directement sur YouTube ou Instagram. Tu peux autoriser leur chargement automatique avec « Tout accepter » ou « Personnaliser ».</p>
+<p>Certaines pages intègrent des vidéos YouTube (Google) et des reels Instagram (Meta). Ces services peuvent déposer des cookies et collecter des données, dont votre adresse IP, lorsque leur contenu s’affiche. Par défaut, ces contenus ne sont pas chargés : un bouton vous permet de les afficher, ou vous pouvez les regarder directement sur YouTube ou Instagram. Vous pouvez autoriser leur chargement automatique avec « Tout accepter » ou « Personnaliser ».</p>
 <h2>Newsletter</h2>
-<p>Quand tu envoies le formulaire d’inscription, ton adresse e-mail est transmise à Substack, qui la traite selon sa propre politique de confidentialité. Rien n’est envoyé à Substack avant que tu valides le formulaire, et ce site ne conserve pas ton adresse e-mail.</p>
-<h2>Modifier ton choix</h2>
-<p>Tu peux changer d’avis à tout moment avec le bouton ci-dessous.</p>
+<p>Quand vous envoyez le formulaire d’inscription, votre adresse e-mail est transmise à Substack, qui la traite selon sa propre politique de confidentialité. Rien n’est envoyé à Substack avant que vous ne validiez le formulaire, et ce site ne conserve pas votre adresse e-mail.</p>
+<h2>Modifier votre choix</h2>
+<p>Vous pouvez changer d’avis à tout moment avec le bouton ci-dessous.</p>
 <p><button type="button" class="btn alt" data-consent-open>Gérer mes cookies</button></p>
 <h2>Tes droits</h2>
-<p>Pour toute question sur tes données ou pour exercer tes droits d’accès, de rectification ou de suppression, écris à <a href="mailto:gael@chatellier.fr">gael@chatellier.fr</a>.</p>
+<p>Pour toute question sur vos données ou pour exercer vos droits d’accès, de rectification ou de suppression, écrivez à <a href="mailto:gael@chatellier.fr">gael@chatellier.fr</a>.</p>
 </div>""" % href(1, "")
 write("confidentialite/index.html", page(1, "confidentialite/", "Confidentialité et cookies — Monsieur Châtellier",
       "Cookies, contenus tiers (YouTube, Instagram) et données personnelles sur le site de Monsieur Châtellier.", priv_body,
@@ -403,5 +435,6 @@ write("llms.txt", """# Monsieur Châtellier
 - [YouTube](%(y)s)
 - [Instagram](%(i)s)
 - [LinkedIn](%(l)s): activité professionnelle (directeur de projets digitaux)
+- [Gilles Rapaport](https://dessins-rapaport.com/): dessinateur de presse et illustrateur des chroniques OK Boomer
 """ % dict(b=BASE, s=SUBSTACK, y=YT, i=IG, l=LI))
 print("ok", OUT, "local" if LOCAL else "prod")
