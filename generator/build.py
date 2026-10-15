@@ -227,11 +227,12 @@ home_body = """<div class="wrap">
     <div class="cover" aria-hidden="true"><span>Monsieur Châtellier</span><h3>OK Boomer</h3><span>Le recueil · illustrations de Gilles&nbsp;Rapaport</span></div>
     <div><h2 id="h-livre">Le livre arrive</h2>
     <p class="wide">Les chroniques OK Boomer seront réunies dans un recueil, avec les dessins de Gilles Rapaport. Abonnez-vous à la newsletter pour être prévenue de la sortie.</p>
-    <a class="btn" href="#abonnement">Me prévenir de la sortie</a></div>
+    <a class="btn" href="NEWSLETTER_HREF">Me prévenir de la sortie</a></div>
   </div>
 </section>
 </div>""" % (signup(anchor=True), href(0, "chroniques/"), cards, href(0, "chroniques/"), YT_ID, esc(YT_TITLE), ph("YouTube (Google)", "https://www.youtube.com/watch?v=" + YT_ID, "Regarder sur YouTube", "la vidéo"), esc(YT_TITLE), esc(YT_DESC), IG_REELS[0], ph("Instagram (Meta)", "https://www.instagram.com/reel/" + IG_REELS[0] + "/", "Voir sur Instagram", "le reel"), IG_REELS[1], ph("Instagram (Meta)", "https://www.instagram.com/reel/" + IG_REELS[1] + "/", "Voir sur Instagram", "le reel"), YT, IG)
 
+home_body = home_body.replace("NEWSLETTER_HREF", href(0, "newsletter/"))
 home_schema = [
     {"@context": "https://schema.org", "@type": "WebSite", "@id": BASE + "/#site", "url": BASE + "/", "name": "Monsieur Châtellier",
      "inLanguage": "fr-FR", "publisher": {"@id": BASE + "/#gael"}},
@@ -347,6 +348,26 @@ write("a-propos/index.html", page(1, "a-propos/", "À propos — Monsieur Châte
       "Qui est Monsieur Châtellier ? Auteur des chroniques OK Boomer depuis 2019, illustrées par Gilles Rapaport. Parcours, newsletter, vidéos et questions fréquentes.",
       about_body, [about_ld, faq_ld, crumbs([("Accueil", BASE + "/"), ("À propos", BASE + "/a-propos/")]), dict(PERSON, **{"@context": "https://schema.org"})]))
 
+# ---------- newsletter
+nl_chro = "".join('<li><a href="%s">%s</a></li>' % (href(1, "chroniques/%s/" % c["slug"]).replace("../", "../", 1), esc(c["title"])) for c in CHRONIQUES)
+nl_body = """<div class="wrap article-wrap">
+<nav class="crumbs" aria-label="Fil d'Ariane"><a href="%s">Accueil</a> › Newsletter</nav>
+<h1>Lettres d’un jeune boomer</h1>
+<p class="lead">La newsletter de Monsieur Châtellier : chaque envoi contient une chronique OK Boomer illustrée par Gilles Rapaport.</p>
+<p>Des capsules humoristiques envoyées par e-mail depuis 2019 : de petites pièces sur le temps qui a passé, souvenirs d’autres époques qui ont forgé mon humanité (et la vôtre ?). Quelques centaines de lecteurs et de lectrices la suivent déjà. L’inscription est gratuite.</p>
+<div class="mt">%s</div>
+<p class="meta mt">Après validation, Substack vous envoie un e-mail de confirmation. Vous pouvez vous désabonner à tout moment.</p>
+<h2>Un aperçu des chroniques</h2>
+<ul>%s</ul>
+</div>""" % (href(1, ""), signup(anchor=True), nl_chro)
+nl_ld = {"@context": "https://schema.org", "@type": "WebPage", "url": BASE + "/newsletter/", "name": "Lettres d’un jeune boomer, la newsletter",
+         "inLanguage": "fr-FR", "about": {"@type": "CreativeWorkSeries", "name": "Lettres d’un jeune boomer", "url": SUBSTACK,
+         "description": "Newsletter de Monsieur Châtellier : une chronique OK Boomer illustrée par Gilles Rapaport dans chaque envoi.",
+         "author": {"@id": BASE + "/#gael"}}, "isPartOf": {"@id": BASE + "/#site"}}
+write("newsletter/index.html", page(1, "newsletter/", "Newsletter — Lettres d’un jeune boomer, par Monsieur Châtellier",
+      "Lettres d’un jeune boomer : la newsletter gratuite de Monsieur Châtellier, une chronique OK Boomer illustrée par Gilles Rapaport dans chaque envoi. Inscription en un clic.",
+      nl_body, [nl_ld, crumbs([("Accueil", BASE + "/"), ("Newsletter", BASE + "/newsletter/")]), dict(PERSON, **{"@context": "https://schema.org"})]))
+
 # ---------- confidentialité
 priv_body = """<div class="wrap article-wrap">
 <nav class="crumbs" aria-label="Fil d'Ariane"><a href="%s">Accueil</a> › Confidentialité et cookies</nav>
@@ -418,7 +439,7 @@ RewriteRule ^ https://www.chatellier.fr%{REQUEST_URI} [L,R=301]
 
 # ---------- robots, sitemap, llms
 write("robots.txt", "User-agent: *\nAllow: /\n\nSitemap: %s/sitemap.xml\n" % BASE)
-urls = ["", "a-propos/", "confidentialite/"] + ["chroniques/%s/" % c["slug"] for c in CHRONIQUES if c["complete"]]
+urls = ["", "a-propos/", "newsletter/", "confidentialite/"] + ["chroniques/%s/" % c["slug"] for c in CHRONIQUES if c["complete"]]
 write("sitemap.xml", '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
       "".join("  <url><loc>%s/%s</loc><lastmod>%s</lastmod></url>\n" % (BASE, u, TODAY) for u in urls) + "</urlset>\n")
 write("llms.txt", """# Monsieur Châtellier
@@ -429,6 +450,7 @@ write("llms.txt", """# Monsieur Châtellier
 - [Accueil](%(b)s/): présentation, chroniques, vidéos, livre à venir
 - [À propos](%(b)s/a-propos/): qui est Monsieur Châtellier, questions fréquentes
 - [Chroniques OK Boomer](%(b)s/chroniques/): extraits des chroniques
+- [Newsletter « Lettres d’un jeune boomer »](%(b)s/newsletter/): inscription gratuite à la newsletter
 
 ## Liens officiels
 - [Newsletter (Substack)](%(s)s)
