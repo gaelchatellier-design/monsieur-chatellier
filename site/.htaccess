@@ -157,8 +157,8 @@ RewriteRule ^post-sitemap\.xml/?$ /sitemap.xml [R=301,L,NE]
 <IfModule mod_expires.c>
   ExpiresActive On
   ExpiresByType text/html "access plus 0 seconds"
-  ExpiresByType text/css "access plus 1 month"
-  ExpiresByType application/javascript "access plus 1 month"
+  ExpiresByType text/css "access plus 1 day"
+  ExpiresByType application/javascript "access plus 1 day"
   ExpiresByType image/jpeg "access plus 1 month"
   ExpiresByType font/woff2 "access plus 1 year"
 </IfModule>
