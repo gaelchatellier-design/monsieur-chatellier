@@ -194,7 +194,7 @@ code{font-family:'Special Elite',monospace;background:#fff;padding:0 4px}
   header{position:sticky;top:0;z-index:100}
   header .wrap{padding:8px 16px;gap:4px 12px}
   .brand{font-size:26px}
-  nav a{font-size:17px;margin-left:12px}
-  nav a:first-child{margin-left:0}
+  nav{display:flex;flex-wrap:nowrap;justify-content:space-between;width:100%}
+  nav a{font-size:clamp(14px,4.6vw,18px);margin-left:0;white-space:nowrap}
   html{scroll-padding-top:96px}
 }
